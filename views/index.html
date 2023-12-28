@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<!-- Boxicons -->
+	<link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+	<!-- My CSS -->
+	<link rel="stylesheet" href="style.css">
+
+	<title>CIBER</title>
+</head>
+<body>
+
+
+	<!-- SIDEBAR -->
+	<section id="sidebar">
+		<a href="#" class="brand">
+			<img class="logo" src="./img/bpc.png" alt="BPC Logo" width="60" height="70">
+		</a>
+		<ul class="side-menu top">
+			<li class="active">
+				<a href="./index.html">
+					<i class='bx bxs-dashboard' ></i>
+					<span class="text">Dashboard</span>
+				</a>
+			</li>
+		
+			<li>
+				<a href="./add.html">
+					<i class='bx bxs-group' ></i>
+					<span class="text">Team</span>
+				</a>
+			</li>
+            <li>
+				<a href="./sorting.html">
+					<i class='bx bxs-search' ></i>
+					<span class="text">Search</span>
+				</a>
+			</li>
+		</ul>
+		<ul class="side-menu">
+	
+                <li>
+                    <a href="#" class="logout" onclick="logout()">
+                        <i class='bx bxs-log-out-circle'></i>
+                        <span class="text">Logout</span>
+                    </a>
+                </li>
+                
+		
+            
+		</ul>
+	</section>
+	<!-- SIDEBAR -->
+
+
+
+	<!-- CONTENT -->
+	<section id="content">
+		<!-- NAVBAR -->
+		<nav>
+			<i class='bx bx-menu' ></i>
+			<form class="form">
+				<div class="form-input">
+					<input type="search" placeholder="Search...">
+					<button type="submit" class="search-btn"><i class='bx bx-search' ></i></button>
+				</div>
+			</form >
+			<input type="checkbox" id="switch-mode" hidden>
+			<label for="switch-mode" class="switch-mode"></label>
+			
+		</nav>
+		<!-- NAVBAR -->
+
+		<!-- MAIN -->
+		
+
+	
+
+
+			<div id="contents">
+				<main>
+				  <div class="head-title">
+					<div class="left">
+					  <h1>Employee List</h1>
+					</div>
+				  </div>
+			
+				  <!-- Table for displaying employee data -->
+				<!-- Table for displaying employee data -->
+<div class="table-data">
+    <div class="order">
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Employee ID</th>
+                    <th>Work Description</th>
+                    <th>Location</th>
+                    <th>Vehicle Number</th>
+                    <th>Date</th>
+                    <th>Actions</th> <!-- Add a new column for actions -->
+                </tr>
+            </thead>
+            <tbody id="employeeTableBody">
+                <!-- Employee data will be dynamically added here -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+				</main>
+			  </div>
+	</section>
+	
+
+	<script src="script.js"></script>
+	<script>
+function logout() {
+    // Remove the authentication token from local storage
+    localStorage.removeItem('authToken');
+
+    // Redirect the user to the login page
+    window.location.href = 'login.html';
+}
+         // Check if the user is authenticated on each page load
+    const authToken = localStorage.getItem('authToken');
+    if (!authToken) {
+      // Redirect to the login page if not authenticated
+      window.location.href = './login.html';
+    }
+// Fetch employee data and update the table
+fetch('/getAllEmployees')
+    .then(response => response.json())
+    .then(data => {
+        const tableBody = document.getElementById('employeeTableBody');
+
+        // Clear existing rows
+        tableBody.innerHTML = '';
+
+        // Populate the table with employee data
+
+data.forEach(employee => {
+    const row = document.createElement('tr');
+    row.setAttribute('data-id', employee._id); // Add this line
+    row.innerHTML = `
+        <td id='in'>${employee.name}</td>
+        <td id='in'>${employee.employeeId}</td>
+        <td id='in'>${employee.workDescription}</td>
+        <td id='in'>${employee.location}</td>
+        <td id='in'>${employee.vehicleNumber}</td>
+        <td id='in'>${employee.date}</td>
+        <td>
+            <button onclick="editEmployee('${employee._id}')">Edit</button>
+            <button onclick="deleteEmployee('${employee._id}')">Delete</button>
+        </td>
+    `;
+    tableBody.appendChild(row);
+});
+
+    })
+    .catch(error => console.error('Error fetching employee data:', error));
+    document.getElementById('employeeTableBody').addEventListener('click', function(event) {
+    const target = event.target;
+
+    // Check if the clicked element is a "Confirm" button
+    if (target.tagName === 'BUTTON' && target.innerText === 'Confirm') {
+        const employeeId = target.closest('tr').getAttribute('data-id');
+        const inputFields = target.parentElement.parentElement.querySelectorAll('input');
+
+        // Call the confirmEdit function with the employeeId and inputFields
+        confirmEdit(employeeId, inputFields);
+    }
+});
+
+function editEmployee(employeeId) {
+    // Find the row and check if it's already in edit mode
+    const row = document.querySelector(`[data-id="${employeeId}"]`);
+    if (row.classList.contains('edit-mode')) {
+        // Edit is already in progress, do nothing
+        return;
+    }
+
+    // Add a class to indicate that the row is in edit mode
+    row.classList.add('edit-mode');
+
+    // Get the cells
+    const cells = row.getElementsByTagName('td');
+
+    // Create input fields for editing, excluding the last cell
+    const inputFields = Array.from(cells).slice(0, cells.length - 1).map(cell => {
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.value = cell.innerText;
+        return input;
+    });
+
+    // Replace cell content with input fields, excluding the last cell
+    Array.from(cells).slice(0, cells.length - 1).forEach((cell, index) => {
+        cell.innerHTML = '';
+        cell.appendChild(inputFields[index]);
+    });
+
+    // Add confirmation buttons
+    const confirmButton = document.createElement('button');
+    confirmButton.innerText = 'Confirm';
+    row.lastElementChild.appendChild(confirmButton);
+}
+
+// Function to handle confirming an edit
+function confirmEdit(employeeId, inputFields) {
+    // Collect the updated data from input fields
+    const updatedEmployee = {
+        name: inputFields[0].value,
+        employeeId: inputFields[1].value,
+        workDescription: inputFields[2].value,
+        location: inputFields[3].value,
+        vehicleNumber: inputFields[4].value,
+        date: inputFields[5].value,
+    };
+
+    // Send a PUT request to the server to update the employee
+    fetch(`/updateEmployee/${employeeId}`, {
+    method: 'PUT',
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(updatedEmployee),
+})
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        alert("Done Updating")
+        console.log(response)
+        // const row = document.querySelector(`[data-id="${employeeId}"]`);
+        // row.lastElementChild.removeChild(row.lastElementChild.firstElementChild);
+        window.location.reload()
+        return response.json();
+    })
+    .catch(error => console.error('Error updating employee:', error));
+
+}
+
+// Function to handle deleting an employee
+function deleteEmployee(employeeId) {
+    // Confirm deletion with user
+    const confirmDelete = confirm('Are you sure you want to delete this employee?');
+    if (confirmDelete) {
+        // Send a DELETE request to the server
+        fetch(`/deleteEmployee/${employeeId}`, {
+            method: 'DELETE',
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                // Return an empty object to handle the case where response.json() is called on an empty body
+                return response.json().catch(() => ({}));
+            })
+            .then(() => {
+                // Remove the row from the table
+                document.querySelector(`[data-id="${employeeId}"]`).remove();
+            })
+            .catch(error => console.error('Error deleting employee:', error));
+    }
+}
+
+	</script>
+</body>
+</html>

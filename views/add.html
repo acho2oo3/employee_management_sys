@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<!-- Boxicons -->
+	<link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+	<!-- My CSS -->
+	<link rel="stylesheet" href="style.css">
+
+	<title>CIBER</title>
+</head>
+<body>
+
+
+	<!-- SIDEBAR -->
+	<section id="sidebar">
+		<a href="#" class="brand">
+			<img class="logo" src="./img/bpc.png" alt="BPC Logo" width="60" height="70">
+		</a>
+		<ul class="side-menu top">
+			<li >
+				<a href="./index.html">
+					<i class='bx bxs-dashboard' ></i>
+					<span class="text">Dashboard</span>
+				</a>
+			</li>
+		
+			<li class="active">
+				<a href="./add.html">
+					<i class='bx bxs-group' ></i>
+					<span class="text">Team</span>
+				</a>
+			</li>
+			<li>
+				<a href="./sorting.html">
+					<i class='bx bxs-search' ></i>
+					<span class="text">Search</span>
+				</a>
+			</li>
+		</ul>
+		<ul class="side-menu">
+			
+			<li>
+				<a href="#" class="logout" onclick="logout()">
+					<i class='bx bxs-log-out-circle'></i>
+					<span class="text">Logout</span>
+				</a>
+			</li>
+		</ul>
+	</section>
+	<!-- SIDEBAR -->
+
+
+
+	<!-- CONTENT -->
+	<section id="content">
+		<!-- NAVBAR -->
+		<nav>
+			<i class='bx bx-menu' ></i>
+			<form class="form">
+				<div class="form-input">
+					<input type="search" placeholder="Search...">
+					<button type="submit" class="search-btn"><i class='bx bx-search' ></i></button>
+				</div>
+			</form >
+			<input type="checkbox" id="switch-mode" hidden>
+			<label for="switch-mode" class="switch-mode"></label>
+			
+		</nav>
+		<!-- NAVBAR -->
+
+		<!-- MAIN -->
+		<main>
+			<div class="head-title">
+				<div class="left">
+					<h1>Dashboard</h1>
+				</div>
+				
+			</div>
+
+	
+
+
+			<div class="table-data">
+				<div class="order">
+
+                        
+                    <form onsubmit="event.preventDefault(); addEmployee();">
+                            <label for="name">Name:</label>
+                            <input type="text" class="form-input" id="name" required><br>
+                            <label for="employeeId">Employee ID:</label>
+                            <input type="text" class="form-input" id="employeeId" required><br>
+                            <label for="workDescription">Work Description:</label>
+                            <input type="text" class="form-input" id="workDescription" required><br>
+                            <label for="location">Location:</label>
+                            <input type="text" class="form-input" id="location" required><br>
+                            <label for="vehicleNumber">Vehicle Number:</label>
+                            <input type="text" class="form-input" id="vehicleNumber" required><br>
+                            <label for="date">Date:</label>
+                            <input type="date" class="form-input" id="date" required><br>
+                            <button type="submit">Submit</button>
+                           
+                          </form> 
+				
+					
+				</div>
+				
+			</div>
+		</main>
+		<!-- MAIN -->
+	</section>
+	<!-- CONTENT -->
+	
+<script>
+	  const authToken = localStorage.getItem('authToken');
+    if (!authToken) {
+      // Redirect to the login page if not authenticated
+      window.location.href = './login.html';
+    }
+	function logout() {
+    // Remove the authentication token from local storage
+    localStorage.removeItem('authToken');
+
+    // Redirect the user to the login page
+    window.location.href = 'login.html';
+}
+
+
+</script>
+	<script src="script.js"></script>
+    <script src="app.js"></script>
+    
+</body>
+</html>
