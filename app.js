@@ -5,10 +5,10 @@ const path = require('path');  // Import the 'path' module
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const uri = "mongodb+srv://ciber:ciber123@cluster0.6sf1nhg.mongodb.net/?retryWrites=true&w=majority"
-mongoose.connect(uri);
+// const uri = "mongodb+srv://ciber:ciber123@cluster0.6sf1nhg.mongodb.net/?retryWrites=true&w=majority"
+// mongoose.connect(uri);
 // Connect to MongoDB
-// mongoose.connect('mongodb://localhost/employee_tracking', { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect("mongodb+srv://ciber:ciber123@cluster0.6sf1nhg.mongodb.net/?retryWrites=true&w=majority");
 
 // Create Employee schema and model
 const employeeSchema = new mongoose.Schema({
