@@ -5,7 +5,7 @@ const path = require('path');  // Import the 'path' module
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const uri = "mongodb+srv://achochencho:3PiknyjG899Cdj7g@cluster0.6sf1nhg.mongodb.net/?retryWrites=true&w=majority"
+const uri = "mongodb+srv://ciber:ciber123@cluster0.6sf1nhg.mongodb.net/?retryWrites=true&w=majority"
 mongoose.connect(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
