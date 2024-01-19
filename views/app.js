@@ -7,6 +7,7 @@ function addEmployee() {
     const location = document.getElementById('location').value;
     const vehicleNumber = document.getElementById('vehicleNumber').value;
     const date = document.getElementById('date').value;
+    const dateend = document.getElementById('dateend').value;
   
     const newEmployee = {
       name,
@@ -14,7 +15,8 @@ function addEmployee() {
       workDescription,
       location,
       vehicleNumber,
-      date
+      date,
+      dateend
     };
   
     // Send data to the server

@@ -11,6 +11,73 @@
 
 	<title>CIBER</title>
 </head>
+<style>
+main{
+	background-image: url("./img/bpc.png");
+	
+
+    /* background-image: url('./img/boss.jpg'); Add your background image URL */
+	/* background-color:#4caf50 ; */
+    background-size: 15%;
+    background-position: center;
+
+}
+.profile-card {
+    position: relative;
+    width: 500px; /* Adjust the width as needed */
+	height: 460px;
+    margin: 20px auto;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.profile-background {
+    width: 100%;
+    height: 130px;
+    /* background-image: url('./img/boss.jpg'); Add your background image URL */
+	background-color:#4caf50 ;
+    background-size: cover;
+    background-position: center;
+}
+
+.profile-content {
+	height: 500px;
+    padding: 20px;
+    background-color: #fff;
+}
+
+.profile-image {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin: 0 auto;
+    display: block;
+}
+
+.profile-name {
+    font-size: 1.5em;
+    margin-top: 10px;
+    text-align: center;
+}
+
+.profile-description {
+    font-size: 1.2em;
+    color: #555;
+    text-align: center;
+}
+
+.profile-details {
+    list-style: none;
+    padding: 0;
+    text-align: center;
+}
+
+.profile-details li {
+    margin-bottom: 5px;
+    color: #888;
+}
+</style>
 <body>
 
 
@@ -20,7 +87,7 @@
 			<img class="logo" src="./img/bpc.png" alt="BPC Logo" width="60" height="70">
 		</a>
 		<ul class="side-menu top">
-			<li >
+			<li  class="active">
 				<a href="./home.html">
 					<i class='bx bxs-dashboard' ></i>
 					<span class="text">Home</span>
@@ -32,7 +99,7 @@
 					<span class="text">Work History</span>
 				</a>
 			</li>
-			<li class="active">
+			<li>
 				<a href="./add.html">
 					<i class='bx bxs-add-to-queue' ></i>
 					<span class="text">Add Details</span>
@@ -61,6 +128,7 @@
 
 	<!-- CONTENT -->
 	<section id="content">
+		
 		<!-- NAVBAR -->
 		<nav>
 			<i class='bx bx-menu' ></i>
@@ -78,31 +146,20 @@
 
 		<!-- MAIN -->
 		<main>
-			<div class="table-data">
-				<div class="order">
-                    <form onsubmit="event.preventDefault(); addEmployee();">
-                            <label for="name">Name:</label>
-                            <input type="text" class="form-input" id="name" required><br>
-                            <label for="employeeId">Employee ID:</label>
-                            <input type="text" class="form-input" id="employeeId" required><br>
-                            <label for="workDescription">Work Description:</label>
-                            <input type="text" class="form-input" id="workDescription" required><br>
-                            <label for="location">Location:</label>
-                            <input type="text" class="form-input" id="location" required><br>
-                            <label for="vehicleNumber">Vehicle Number:</label>
-                            <input type="text" class="form-input" id="vehicleNumber" required><br>
-                            <label for="date">Start Date:</label>
-                            <input type="date" class="form-input" id="date" required><br>
-							<label for="dateend">End Date:</label>
-                            <input type="date" class="form-input" id="dateend" required><br>
-                            <button type="submit">Submit</button>
-                           
-                          </form> 
-				
-					
+			<div class="profile-card">
+				<div class="profile-background"></div>
+				<div class="profile-content">
+					<img class="profile-image" src="./img/boss.jpg" alt="Profile Image">
+					<h1 class="profile-name">Arjun Tamang</h1>
+					<p class="profile-description">O&M Head & MTO</p>
+					<ul class="profile-details">
+						<li>ESD Trashiyangtse</li>
+					</ul>
 				</div>
-				
 			</div>
+	
+
+
 		</main>
 		<!-- MAIN -->
 	</section>

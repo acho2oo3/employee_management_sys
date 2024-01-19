@@ -5,10 +5,13 @@ const path = require('path');  // Import the 'path' module
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-// const uri = "mongodb+srv://ciber:ciber123@cluster0.6sf1nhg.mongodb.net/?retryWrites=true&w=majority"
-// mongoose.connect(uri);
+const uri = "mongodb+srv://achochencho:3PiknyjG899Cdj7g@cluster0.6sf1nhg.mongodb.net/?retryWrites=true&w=majority"
+mongoose.connect(uri, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 // Connect to MongoDB
-mongoose.connect("mongodb+srv://ciber:ciber123@cluster0.6sf1nhg.mongodb.net/?retryWrites=true&w=majority");
+// mongoose.connect('mongodb://localhost/employee_tracking', { useNewUrlParser: true, useUnifiedTopology: true });
 
 // Create Employee schema and model
 const employeeSchema = new mongoose.Schema({
@@ -17,7 +20,8 @@ const employeeSchema = new mongoose.Schema({
   workDescription: String,
   location: String,
   vehicleNumber: String,
-  date: String
+  date: String,
+  dateend: String
 });
 
 const Employee = mongoose.model('Employee', employeeSchema);
@@ -37,7 +41,7 @@ app.use(express.static(path.join(__dirname, 'views')));
 // Save employee data
 app.post('/addEmployee', async (req, res) => {
   try {
-    const { name, employeeId, workDescription, location, vehicleNumber, date } = req.body;
+    const { name, employeeId, workDescription, location, vehicleNumber, date,dateend } = req.body;
 
     // Create a new employee instance
     const newEmployee = new Employee({
@@ -46,7 +50,8 @@ app.post('/addEmployee', async (req, res) => {
       workDescription,
       location,
       vehicleNumber,
-      date
+      date,
+      dateend
     });
 
     // Save the new employee to the database
@@ -125,9 +130,8 @@ app.delete('/deleteEmployee/:employeeId', async (req, res) => {
     console.error('Error deleting employee:', err);
     res.status(500).json({ error: 'Internal server error' });
   }
-});
-
-
+})
+app.use(bodyParser.json());
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);

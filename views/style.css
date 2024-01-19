@@ -75,7 +75,7 @@ input {
 }
 
 button {
-	background-color: var(--blue);
+	background-color: #4caf50 ;
 	color: var(--light);
 	padding: 10px 20px;
 	border: none;
@@ -183,7 +183,7 @@ form {
 	overflow-x: hidden;
 }
 #sidebar .side-menu.top li.active a {
-	color: var(--blue);
+	color: #4caf50 ;
 }
 #sidebar.hide .side-menu li a {
 	width: calc(48px - (4px * 2));
@@ -193,7 +193,7 @@ form {
 	color: var(--red);
 }
 #sidebar .side-menu.top li a:hover {
-	color: var(--blue);
+	color: #4caf50 ;
 }
 #sidebar .side-menu li a .bx {
 	min-width: calc(60px  - ((4px + 6px) * 2));
@@ -257,7 +257,7 @@ form {
 	transition: .3s ease;
 }
 #content nav .nav-link:hover {
-	color: var(--blue);
+	color: #4caf50 ;
 }
 #content nav form {
 	max-width: 400px;
@@ -286,7 +286,7 @@ form {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	background: var(--blue);
+	background: #4caf50 ;
 	color: var(--light);
 	font-size: 18px;
 	border: none;
@@ -343,8 +343,6 @@ form {
 #content nav #switch-mode:checked + .switch-mode::before {
 	left: calc(100% - (25px - 4px) - 2px);
 }
-/* NAVBAR */
-
 
 
 
@@ -352,7 +350,7 @@ form {
 /* MAIN */
 #content main {
 	width: 100%;
-	padding: 36px 24px;
+	padding: 24px 24px;
 	font-family: var(--poppins);
 	max-height: calc(100vh - 56px);
 	overflow-y: auto;
@@ -453,8 +451,8 @@ form {
 #content main .table-data {
 	display: flex;
 	flex-wrap: wrap;
-	grid-gap: 24px;
-	margin-top: 24px;
+	/* grid-gap: 24px;
+	margin-top: 24px; */
 	width: 100%;
 	color: var(--dark);
 }
