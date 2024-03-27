@@ -23,12 +23,7 @@ function addEmployee() {
     addEmployeeToServer(newEmployee);
   }
   
-  function searchEmployee() {
-    const searchQuery = document.getElementById('searchQuery').value;
-  
-    // Send data to the server
-    searchEmployeeOnServer(searchQuery);
-  }
+ 
   
   function displaySearchResults(results) {
     const searchResultsDiv = document.getElementById('searchResults');
@@ -86,17 +81,35 @@ function clearFormFields() {
         formFields[i].value = '';
     }
 }
+function searchEmployee() {
+  const employeeId = document.getElementById('searchInput').value;
+  const date = document.getElementById('startDate').value;
+  const dateend = document.getElementById('endDate').value;
 
-  function searchEmployeeOnServer(searchQuery) {
-    // Send a POST request to the server endpoint for searching employees
-    fetch('/search-employee', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ searchQuery })
+  const searchQuery = {
+    employeeId,
+    date,
+    dateend
+  };
+
+  searchEmployeeOnServer(searchQuery);
+}
+
+function searchEmployeeOnServer(searchQuery) {
+  // Send a POST request to the server endpoint for searching employees
+  fetch('/getEmployee', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(searchQuery)
+  })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json();
     })
-    .then(response => response.json())
     .then(results => {
       console.log('Search results:', results);
       displaySearchResults(results);
@@ -104,5 +117,4 @@ function clearFormFields() {
     .catch(error => {
       console.error('Error searching for employee:', error);
     });
-  }
-  
+}
