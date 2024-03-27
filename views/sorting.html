@@ -70,6 +70,7 @@
 					<button type="submit" class="search-btn"><i class='bx bx-search' ></i></button>
 				</div>
 			</form >
+            
 			<input type="checkbox" id="switch-mode" hidden>
 			<label for="switch-mode" class="switch-mode"></label>
 			
@@ -86,9 +87,19 @@
 				<main>
 				  <div class="head-title">
 					<div class="search-form">
-						<label for="employeeId">Enter Employee ID:</label>
-						<input type="text" id="searchInput" placeholder="Employee ID">
-						<button onclick="searchEmployee()">Search</button>
+                        <div class="input-group">
+                            <label for="employeeId">Employee ID:</label>
+                            <input type="text" id="searchInput" placeholder="Employee ID">
+                        </div>
+                        <div class="input-group">
+                            <label for="startDate">Start Date:</label>
+                            <input type="date" id="startDate">
+                        </div>
+                        <div class="input-group">
+                            <label for="endDate">End Date:</label>
+                            <input type="date" id="endDate">
+                        </div>
+                        <button onclick="searchEmployee()">Search</button>
                     </div>
 				  </div>
 			
@@ -174,113 +185,140 @@ function editEmployee(employeeId) {
     confirmButton.innerText = 'Confirm';
     row.lastElementChild.appendChild(confirmButton);
 }
-/// Function to search for employees
 function searchEmployee() {
-    const employeeId = document.getElementById('searchInput').value;
+  const employeeId = document.getElementById('searchInput').value;
+  const date = document.getElementById('startDate').value;
+  const dateend = document.getElementById('endDate').value;
 
-    fetch(`/getEmployee/${employeeId}`)
+  const searchQuery = {
+    employeeId,
+    date,
+    dateend
+  };
+
+  console.log('Search Query:', searchQuery); // Log the payload data
+
+  searchEmployeeOnServer(searchQuery);
+}
+
+function searchEmployeeOnServer(searchQuery) {
+  const url = '/getEmployee';
+
+  fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(searchQuery)
+  })
     .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        return response.json();
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json();
     })
     .then(data => {
-        const tableBody = document.getElementById('employeeTableBody');
-
-        // Clear existing rows
-        tableBody.innerHTML = '';
-
-        if (Array.isArray(data)) {
-            if (data.length > 0) {
-                // Populate the table with searched employee data
-                data.forEach(employee => {
-                    const row = createTableRow(employee);
-                    tableBody.appendChild(row);
-                });
-            } else {
-                console.log('No employees found for the given ID');
-            }
-        } else {
-            console.error('Invalid data format:', data);
-        }
+      console.log('Search results:', data);
+      displaySearchResults(data);
     })
-    .catch(error => console.error('Error fetching employee data:', error));
-
-// Function to create a table row for an employee
-function createTableRow(employee) {
-    const row = document.createElement('tr');
-    row.setAttribute('data-id', employee._id);
-    row.innerHTML = `
-        <td>${employee.name}</td>
-        <td>${employee.employeeId}</td>
-        <td>${employee.workDescription}</td>
-        <td>${employee.location}</td>
-        <td>${employee.vehicleNumber}</td>
-        <td>${employee.date}</td>
-        <td>${employee.dateend}</td>
-        <td>
-            <button onclick="editEmployee('${employee._id}')">Edit</button>
-            <button onclick="deleteEmployee('${employee._id}')">Delete</button>
-        </td>
-    `;
-    return row;
+    .catch(error => {
+      console.error('Error searching for employee:', error);
+      alert('Error searching for employee: ' + error.message);
+    });
 }
 
 
+function displaySearchResults(results) {
+  const tableBody = document.getElementById('employeeTableBody');
+
+  // Clear existing rows
+  tableBody.innerHTML = '';
+
+  if (Array.isArray(results)) {
+    if (results.length > 0) {
+      // Populate the table with searched employee data
+      results.forEach(employee => {
+        const row = createTableRow(employee);
+        tableBody.appendChild(row);
+      });
+    } else {
+      console.log('No employees found for the given criteria');
+    }
+  } else {
+    console.error('Invalid data format:', results);
+  }
+}
+
+// Function to create a table row for an employee
+function createTableRow(employee) {
+  const row = document.createElement('tr');
+  row.setAttribute('data-id', employee._id);
+  const formattedDate = employee.date ? employee.date.substring(0, 10) : '';
+    const formattedDateEnd = employee.dateend ? employee.dateend.substring(0, 10) : '';
+  row.innerHTML = `
+    <td>${employee.name}</td>
+    <td>${employee.employeeId}</td>
+    <td>${employee.workDescription}</td>
+    <td>${employee.location}</td>
+    <td>${employee.vehicleNumber}</td>
+    <td>${formattedDate}</td>
+    <td>${formattedDateEnd}</td>
+    <td>
+      <button onclick="editEmployee('${employee._id}')">Edit</button>
+      <button onclick="deleteEmployee('${employee._id}')">Delete</button>
+    </td>
+  `;
+  return row;
+}
 
 // Initial load - you may choose to leave this empty or handle it based on your requirements
 
 document.getElementById('employeeTableBody').addEventListener('click', function (event) {
-    const target = event.target;
+  const target = event.target;
 
-    // Check if the clicked element is a "Confirm" or "Cancel" button
-    if (target.tagName === 'BUTTON' && (target.innerText === 'Confirm' || target.innerText === 'Cancel')) {
-        const employeeId = target.closest('tr').getAttribute('data-id');
-        const inputFields = target.parentElement.parentElement.querySelectorAll('input');
+  // Check if the clicked element is a "Confirm" or "Cancel" button
+  if (target.tagName === 'BUTTON' && (target.innerText === 'Confirm' || target.innerText === 'Cancel')) {
+    const employeeId = target.closest('tr').getAttribute('data-id');
+    const inputFields = target.parentElement.parentElement.querySelectorAll('input');
 
-        // Call the confirmEdit function with the employeeId, inputFields, and the action ('Confirm' or 'Cancel')
-        confirmEdit(employeeId, inputFields, target.innerText);
-    }
+    // Call the confirmEdit function with the employeeId, inputFields, and the action ('Confirm' or 'Cancel')
+    confirmEdit(employeeId, inputFields, target.innerText);
+  }
 });
-
-
 
 // Function to handle confirming an edit
 function confirmEdit(employeeId, inputFields) {
-    // Collect the updated data from input fields
-    const updatedEmployee = {
-        name: inputFields[0].value,
-        employeeId: inputFields[1].value,
-        workDescription: inputFields[2].value,
-        location: inputFields[3].value,
-        vehicleNumber: inputFields[4].value,
-        date: inputFields[5].value,
-        dateend: inputFields[6].value,
-    };
+  // Collect the updated data from input fields
+  const updatedEmployee = {
+    name: inputFields[0].value,
+    employeeId: inputFields[1].value,
+    workDescription: inputFields[2].value,
+    location: inputFields[3].value,
+    vehicleNumber: inputFields[4].value,
+    date: inputFields[5].value,
+    dateend: inputFields[6].value,
+  };
 
-    // Send a PUT request to the server to update the employee
-    fetch(`/updateEmployee/${employeeId}`, {
+  // Send a PUT request to the server to update the employee
+  fetch(`/updateEmployee/${employeeId}`, {
     method: 'PUT',
     headers: {
-        'Content-Type': 'application/json',
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify(updatedEmployee),
-})
+  })
     .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        alert("Done Updating")
-        console.log(response)
-        // const row = document.querySelector(`[data-id="${employeeId}"]`);
-        // row.lastElementChild.removeChild(row.lastElementChild.firstElementChild);
-        window.location.reload()
-        return response.json();
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      alert("Done Updating")
+      console.log(response)
+      // const row = document.querySelector(`[data-id="${employeeId}"]`);
+      // row.lastElementChild.removeChild(row.lastElementChild.firstElementChild);
+      window.location.reload()
+      return response.json();
     })
     .catch(error => console.error('Error updating employee:', error));
-
-}
 }
 // Function to handle deleting an employee
 function deleteEmployee(employeeId) {
