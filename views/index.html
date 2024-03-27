@@ -144,14 +144,17 @@ fetch('/getAllEmployees')
 data.forEach(employee => {
     const row = document.createElement('tr');
     row.setAttribute('data-id', employee._id); // Add this line
+    const formattedDate = employee.date ? employee.date.substring(0, 10) : '';
+    const formattedDateEnd = employee.dateend ? employee.dateend.substring(0, 10) : '';
+    console.log(formattedDate)
     row.innerHTML = `
         <td id='in'>${employee.name}</td>
         <td id='in'>${employee.employeeId}</td>
         <td id='in'>${employee.workDescription}</td>
         <td id='in'>${employee.location}</td>
         <td id='in'>${employee.vehicleNumber}</td>
-        <td id='in'>${employee.date}</td>
-        <td id='in'>${employee.dateend}</td>
+        <td id='in'>${formattedDate}</td>
+        <td id='in'>${formattedDateEnd}</td>
         <td>
             <button onclick="editEmployee('${employee._id}')">Edit</button>
             <button onclick="deleteEmployee('${employee._id}')">Delete</button>
