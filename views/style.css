@@ -202,7 +202,22 @@ form {
 }
 /* SIDEBAR */
 
+.search-form {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 1rem;
+}
 
+.input-group {
+    display: flex;
+    align-items: center;
+    margin-right: 1rem;
+}
+
+.input-group label {
+    margin-right: 0.5rem;
+}
 
 
 
