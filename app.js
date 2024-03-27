@@ -20,8 +20,8 @@ const employeeSchema = new mongoose.Schema({
   workDescription: String,
   location: String,
   vehicleNumber: String,
-  date: String,
-  dateend: String
+  date: Date,
+  dateend: Date
 });
 
 const Employee = mongoose.model('Employee', employeeSchema);
@@ -71,20 +71,41 @@ app.get('/getAllEmployees', async (req, res) => {
     res.status(500).send(err.message);
   }
 });
+// Middleware to parse JSON bodies
+app.use(express.json());
 
-// Retrieve employee data by employeeId
-app.get('/getEmployee/:employeeId', async (req, res) => {
+// Define the route handler for POST requests to '/getEmployee'
+// Define the route handler for POST requests to '/getEmployee'
+// Define the route handler for POST requests to '/getEmployee'
+app.post('/getEmployee', async (req, res) => {
   try {
-    const { employeeId } = req.params;
-    const employees = await Employee.find({ employeeId });
+    const { employeeId, date, dateend } = req.body; // Access search criteria from request body
+    const query = {};
+
+    if (employeeId) {
+      query.employeeId = employeeId;
+    }
+
+    // Adjust date range to filter works based on start date and end date inclusively
+    if (date && dateend) {
+      query.date = { $gte: new Date(date), $lte: new Date(dateend) };
+    } else if (date) {
+      query.date = { $gte: new Date(date) };
+    } else if (dateend) {
+      query.date = { $lte: new Date(dateend) };
+    }
+    
+
+    const employees = await Employee.find(query);
 
     if (employees.length > 0) {
       res.status(200).json(employees);
     } else {
-      res.status(404).json({ error: 'Employees not found for the given ID' });
+      res.status(404).json({ error: 'Employees not found for the given criteria' });
     }
   } catch (err) {
-    res.status(500).send(err.message);
+    console.error(err);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 
